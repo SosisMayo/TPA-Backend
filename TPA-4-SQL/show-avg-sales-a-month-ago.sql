@@ -1,0 +1,2 @@
+SELECT AVG(total) as average FROM orders
+WHERE timestamp BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW();
