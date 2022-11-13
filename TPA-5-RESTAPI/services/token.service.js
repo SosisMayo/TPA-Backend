@@ -27,8 +27,21 @@ const verifyToken = (auth) => {
     }
 }
 
+const refresh = (auth) => {
+    let token = auth.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const accessToken = generateToken(decoded.id, decoded.role,process.env.JWT_ACCESS_TOKEN_EXPIRE);
+    const refreshToken = generateToken(decoded.id, decoded.role,process.env.JWT_REFRESH_TOKEN_EXPIRE);
+    return {
+        accessToken,
+        refreshToken
+    }
+}
+
+
 module.exports = {
     generateToken,
     generateAuthTokens,
-    verifyToken
+    verifyToken,
+    refresh
 }

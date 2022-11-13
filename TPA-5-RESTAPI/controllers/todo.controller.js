@@ -11,12 +11,12 @@ const GetAllTodo = async (req, res, next) => {
             data: todos
         });
     } catch (error) {
-        if (error.name === 'NotFoundError') {
+        if (error.message === 'NotFoundError') {
             res.status(404).json({
                 message: 'Todo not found'
             });
         }
-        else if (error.name === 'ValidationError') {
+        else if (error.message === 'ValidationError') {
             res.status(400).json({
                 message: 'Validation Error'
             });
@@ -82,6 +82,11 @@ const GetTodoById = async (req, res) => {
                 message: 'Validation Error'
             });
         }
+        else if (error.message === 'ForbiddenError') {
+            res.status(403).json({
+                message: 'Forbidden'
+            });
+        }
         else {
             res.status(500).json({
                 message: 'Internal Server Error'
@@ -106,8 +111,8 @@ const CreateTodo = async (req, res) => {
             });
         }
         else {
-            res.status(500).json({
-                message: 'Internal Server Error'
+            res.status(400).json({
+                message: error.message
             });
         }
     }

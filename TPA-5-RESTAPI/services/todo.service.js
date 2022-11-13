@@ -3,7 +3,7 @@ const {Todos} = require('../models');
 // Get All Todos
 const getAllTodo = async () => {
     const todos = await Todos.findAll();
-    if (!todos) {
+    if (todos.length === 0) {
         throw new Error('NotFoundError');
     }
     return todos;
@@ -16,10 +16,10 @@ const getAllTodoByUserId = async (userId, role, paramId) => {
     }
     const todos = await Todos.findAll({
         where: {
-            user_id: userId
+            user_id: paramId
         }
     });
-    if (!todos) {
+    if (todos.length === 0) {
         throw new Error('NotFoundError');
     }
     return todos;
@@ -32,11 +32,11 @@ const getTodoById = async (userId,id) => {
             id: id
         }
     });
-    if (todo.userId != userId) {
-        throw new Error('ForbiddenError');
-    }
     if (!todo) {
         throw new Error('NotFoundError');
+    }
+    if (todo.user_id != userId) {
+        throw new Error('ForbiddenError');
     }
     return todo;
 }
@@ -113,7 +113,7 @@ const deleteAllTodoByUserId = async (userId, role, paramId) => {
 // Delete All Todos
 const deleteAllTodo = async () => {
     const todos = await Todos.findAll();
-    if (!todos) {
+    if (todos.length === 0) {
         throw new Error('NotFoundError');
     }
     todos.forEach(async (todo) => {
